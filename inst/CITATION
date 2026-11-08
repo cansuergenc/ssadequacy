@@ -1,0 +1,26 @@
+citHeader("To cite ssadequacy in publications use:")
+
+bibentry(
+  bibtype  = "Unpublished",
+  title    = "Beyond Rules of Thumb: A Bottleneck Theory of Sample Size Adequacy",
+  author   = person("Cansu", "Ergenç Özdaş"),
+  year     = "2026",
+  note     = "Manuscript in preparation",
+  textVersion = paste(
+    "Ergenç Özdaş, C. (2026). Beyond rules of thumb: A bottleneck theory of",
+    "sample size adequacy. Manuscript in preparation."
+  )
+)
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "ssadequacy: Sample Size Adequacy: Joint Power, Precision, Stability and Feasibility Planning",
+  author   = person("Cansu", "Ergenç Özdaş"),
+  year     = "2026",
+  note     = "R package version 0.1.0",
+  url      = "https://github.com/cansuergenc/ssadequacy",
+  textVersion = paste(
+    "Ergenç Özdaş, C. (2026). ssadequacy: Sample Size Adequacy: Joint Power,",
+    "Precision, Stability and Feasibility Planning. R package version 0.1.0."
+  )
+)

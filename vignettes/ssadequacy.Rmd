@@ -1,0 +1,112 @@
+---
+title: "Planning sample size with the SSA framework"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Planning sample size with the SSA framework}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(ssadequacy)
+```
+
+## The idea
+
+A study is *adequate* when four requirements hold at the same time, all of them
+for the parameters that carry the study's claims (the *focal parameters*):
+
+| Criterion | Requirement |
+|---|---|
+| Detectability | power of the focal Wald tests is at least π |
+| Precision | the 95% confidence interval width is at most δ (in expectation, or with assurance γ) |
+| Stability | the absolute relative bias is at most τ |
+| Feasibility | the rate of admissible (converged, Heywood-free) solutions is at least κ |
+
+The minimum adequate sample size N\* is the largest of the four
+criterion-specific requirements. The criterion that attains this maximum is the
+*bottleneck*. `ssadequacy` predicts the bottleneck analytically and then
+verifies it by simulation.
+
+## The power–precision crossover
+
+Let r = δ/|θ| be the target interval width relative to the effect size. Under
+unit-information asymptotics, the precision requirement divided by the power
+requirement equals (r\*/r)², where
+
+```{r}
+ssa_crossover()              # alpha = .05, power = .80
+ssa_crossover(power = .90)
+```
+
+Precision binds whenever r < r\*. This ordering does not depend on the method,
+the model size, or the distribution of the data.
+
+## Regression and ANOVA
+
+```{r}
+d_reg <- ssa_design_regression(k = 3, R2 = .10, rho = .30)
+ssa_analytic(d_reg, delta = .25)
+```
+
+The focal parameters are the standardized coefficients. Their 80% power
+requirement (about 400) is much larger than that of the omnibus test of
+R² (about 100). Planning with the omnibus test would therefore understate the
+sample needed for coefficient-level claims.
+
+```{r}
+d_aov <- ssa_design_anova(k = 2, f = .25)          # d = .50
+ssa_analytic(d_aov, delta = .50, assurance = .80)
+```
+
+## Confirmatory factor analysis
+
+```{r}
+d_cfa <- ssa_design_cfa(nfactors = 3, nind = 5, loadings = c(.35, .40))
+ssa_analytic(d_cfa, delta = .20)
+ssa_feasibility(d_cfa, N = c(100, 150, 200))
+```
+
+For weak loadings, admissible solutions are rare at N = 100. The calibrated
+scaling law places the feasibility floor near N = 150. Precision is
+nevertheless the bottleneck at δ = .20.
+
+## Planning from a fitted model
+
+The planning population can be taken from a pilot or published solution:
+
+```{r}
+fit <- lavaan::cfa("visual  =~ x1 + x2 + x3
+                    textual =~ x4 + x5 + x6
+                    speed   =~ x7 + x8 + x9",
+                   data = lavaan::HolzingerSwineford1939, std.lv = TRUE)
+d_hs <- ssa_design_from_lavaan(fit)
+a_hs <- ssa_analytic(d_hs, delta = .20, assurance = .80, se_cv = 1)
+a_hs
+```
+
+## Verifying by simulation
+
+`ssa_simulate()` simulates the design on a grid centred on the analytic N\*,
+solves each criterion with theory-based smoothing, and re-simulates at the
+solution. The call below takes several minutes and is therefore not run here:
+
+```{r, eval = FALSE}
+s_hs <- ssa_simulate(d_hs, delta = .20, assurance = .80, reps = 1000, cores = 4)
+s_hs
+```
+
+For this model the simulation gave N\* = 243 (analytic: 245), with precision as
+the binding criterion. At N\* the assurance was .80 and power was 1.00.
+
+## Reporting
+
+```{r}
+ssa_report(a_hs)
+```
+
+## Interactive use
+
+`run_ssa_app()` opens a Shiny planner that runs the analytic analysis,
+draws the crossover plot, and runs the simulation on demand.

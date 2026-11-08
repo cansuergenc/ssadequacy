@@ -1,0 +1,38 @@
+Package: ssadequacy
+Type: Package
+Title: Sample Size Adequacy: Joint Power, Precision, Stability and
+        Feasibility Planning
+Version: 0.1.0
+Authors@R: person("Cansu", "Ergenç Özdaş", role = c("aut", "cre"), email = "cansuergenc7@gmail.com",
+                  comment = c(ORCID = "0000-0002-4722-0911",
+                              affiliation = "Ankara Yıldırım Beyazıt University, cansuergenc@aybu.edu.tr"))
+Description: Implements the Sample Size Adequacy (SSA) framework, in which the
+    minimum adequate sample size is the smallest N that jointly satisfies
+    detectability (power), precision (confidence interval width, optionally
+    with assurance; Kelley and Rausch (2006) <doi:10.1037/1082-989X.11.4.363>),
+    stability (relative bias) and feasibility (rate of admissible solutions).
+    Provides closed-form predictions of the binding criterion based on
+    unit-information asymptotics, generalizing Goodman and Berlin (1994)
+    <doi:10.7326/0003-4819-121-3-199408010-00008>, a calibrated
+    weak-identification law for the admissibility of confirmatory factor
+    analysis solutions, and Monte Carlo verification with root finding for
+    confirmatory factor analysis (via 'lavaan'), multiple regression and
+    one-way ANOVA. Non-normal data are generated with the method of Vale and
+    Maurelli (1983) <doi:10.1007/BF02293687>. An interactive 'shiny' planner
+    is included.
+License: GPL (>= 3)
+URL: https://github.com/cansuergenc/ssadequacy
+BugReports: https://github.com/cansuergenc/ssadequacy/issues
+Encoding: UTF-8
+Language: en-US
+Depends: R (>= 4.1)
+Imports: lavaan (>= 0.6-12), stats, parallel
+Suggests: shiny, testthat (>= 3.0.0), knitr, rmarkdown
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+RoxygenNote: 7.3.1
+NeedsCompilation: no
+Packaged: 2026-11-08 11:34:14 UTC; root
+Author: Cansu Ergenç Özdaş [aut, cre] (<https://orcid.org/0000-0002-4722-0911>,
+    Ankara Yıldırım Beyazıt University, cansuergenc@aybu.edu.tr)
+Maintainer: Cansu Ergenç Özdaş <cansuergenc7@gmail.com>
